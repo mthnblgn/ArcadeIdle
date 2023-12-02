@@ -238,8 +238,7 @@ namespace Cinemachine.Editor
         private const string kCinemachineDocURL = @"http://www.cinemachineimagery.com/documentation/";
 
         private static Vector2 sScrollPosition = Vector2.zero;
-
-        [PreferenceItem("Cinemachine")]
+        [SettingsProvider()]
         private static void OnGUI()
         {
             if (CinemachineHeader != null)

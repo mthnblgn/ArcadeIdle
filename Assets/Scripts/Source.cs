@@ -8,18 +8,20 @@ using UnityEngine.UI;
 public class Source : MonoBehaviour
 {
     Camera _mainCam;
+
     [SerializeField] Image _counter;
     [SerializeField] float _paddingUp;
-    [SerializeField] float _countdownTime;
     [SerializeField] SourcesScriptable _sourceData;
-    [SerializeField] Renderer _sourceMaterial;
-    [SerializeField]private bool _collectionCheck=true;
-    [SerializeField] private int _defaultCapacity=10;
+    [SerializeField] private bool _collectionCheck = true;
+    [SerializeField] private int _defaultCapacity = 10;
     [SerializeField] private int _maxSize = 500;
+    [SerializeField] Ingredient _ingredientPrefab;
+    [SerializeField] Renderer _tokenRenderer;
 
+    float _countdownTime;
     float _time;
     bool _isReady;
-    Ingredient _currentIngredient; 
+    Ingredient _currentIngredient;
     IObjectPool<Ingredient> _objectPool;
 
     private void Awake()
@@ -29,9 +31,14 @@ public class Source : MonoBehaviour
                 _collectionCheck, _defaultCapacity, _maxSize);
         _mainCam = Camera.main;
     }
+    private void Start()
+    {
+        _countdownTime = _sourceData._waitingTime;
+        _tokenRenderer.material = _sourceData._ingredientMat;
+    }
     void FixedUpdate()
     {
-        _counter.rectTransform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * _paddingUp);
+        _counter.rectTransform.LookAt(_mainCam.transform.position);
         if (_countdownTime > _time)
         {
             _time += Time.deltaTime;
@@ -39,15 +46,17 @@ public class Source : MonoBehaviour
             _counter.color = LerpColor(Color.red, Color.yellow, Color.green, _counter.fillAmount);
             if (_countdownTime <= _time)
             {
-                 _currentIngredient = _objectPool.Get();
-                _currentIngredient.transform.position = transform.position+Vector3.up*_paddingUp;
+                _currentIngredient = _objectPool.Get();
+                _currentIngredient.ID = _sourceData.ID;
+                _currentIngredient.ChangeMaterial(_sourceData._ingredientMat);
+                _currentIngredient.transform.position = transform.position + Vector3.up * _paddingUp;
                 _isReady = true;
             }
         }
     }
     private void OnTriggerStay(Collider other)
     {
-        if (_isReady && other.TryGetComponent(out Actor actor))
+        if (_isReady && other.TryGetComponent(out Actor actor) && actor.NextEmptyPoint() != null)
         {
             _time = 0;
             _counter.fillAmount = 0;
@@ -59,7 +68,7 @@ public class Source : MonoBehaviour
     // invoked when creating an item to populate the object pool
     private Ingredient CreateIngredient()
     {
-        Ingredient ingredientInstance = Instantiate(_sourceData._ingredientPrefab);
+        Ingredient ingredientInstance = Instantiate(_ingredientPrefab);
         ingredientInstance.ObjectPool = _objectPool;
         return ingredientInstance;
     }
@@ -80,6 +89,10 @@ public class Source : MonoBehaviour
     private void OnDestroyPooledObject(Ingredient pooledObject)
     {
         Destroy(pooledObject.gameObject);
+    }
+    public void SetSource(SourcesScriptable sourceScriptable)
+    {
+        _sourceData = sourceScriptable;
     }
     Color LerpColor(Color a, Color b, Color c, float value)
     {

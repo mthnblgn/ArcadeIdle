@@ -1,18 +1,37 @@
 
+using DG.Tweening;  
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class Ingredient :MonoBehaviour
+public class Ingredient : MonoBehaviour
 {
-    Renderer _renderer;
+    private int _id { get; set; }
+    public int ID { get { return _id; } set { _id = value; } }
+
+    [SerializeField] Renderer _renderer;
+
     private IObjectPool<Ingredient> objectPool;
     public IObjectPool<Ingredient> ObjectPool { set => objectPool = value; }
-    private void Awake()
+    Carrier _carryPoint;
+
+    private void FixedUpdate()
     {
-        _renderer = GetComponent<Renderer>();
+        if (_carryPoint != null)
+        {
+            transform.DOMove(_carryPoint.transform.position, (_carryPoint.transform.position.y * 0.05f));
+        }
     }
-    public void ChangeColor(Material mat)
+    public void ChangeMaterial(Material mat)
     {
-        _renderer.material=mat;
+        _renderer.material = mat;
+    }
+    public void Carry(Carrier carryPoint)
+    {
+        if (carryPoint != null)
+        {
+            _carryPoint = carryPoint;
+            transform.parent = _carryPoint.transform;
+            _carryPoint._isEmpty = false;
+        }
     }
 }

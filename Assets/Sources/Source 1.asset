@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06afb66331a50ab43b1ed45e93d326c5, type: 3}
   m_Name: Source 1
   m_EditorClassIdentifier: 
-  ID: 0
+  ID: 1
   name: 
-  _waitingTime: 10
-  _ingredientPrefab: {fileID: 8225389452202043160, guid: 482d10ccf6d75984eaa7bf08849ed6c4, type: 3}
+  _waitingTime: 15
+  _ingredientMat: {fileID: 2100000, guid: e492e34ab73786d4aa29512ab12ede2c, type: 2}
+  _sourcePrice: 1400

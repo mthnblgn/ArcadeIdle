@@ -6,7 +6,8 @@ using UnityEngine;
 public class SourcesScriptable : ScriptableObject
 {
     public int ID;
-    public string name;
+    public string Name;
     public float _waitingTime;
-    public Ingredient _ingredientPrefab;
+    public Material _ingredientMat;
+    public int _sourcePrice;
 }
