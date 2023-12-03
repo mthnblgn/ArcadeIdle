@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Source 2
   m_EditorClassIdentifier: 
   ID: 2
-  name: 
+  Name: 
   _waitingTime: 20
   _ingredientMat: {fileID: 2100000, guid: b265ef18b68c8bd4b9f1d23074de7d90, type: 2}
   _sourcePrice: 4000
+  _ingredientSellValue: 1500

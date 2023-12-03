@@ -10,4 +10,5 @@ public class SourcesScriptable : ScriptableObject
     public float _waitingTime;
     public Material _ingredientMat;
     public int _sourcePrice;
+    public int _ingredientSellValue;
 }

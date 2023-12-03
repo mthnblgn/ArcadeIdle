@@ -16,6 +16,9 @@ public class Player : MonoBehaviour
             PlayerPrefs.SetInt(_moneyKey, _money);
         }
     }
+    [SerializeField] Image _countdownImage;
+
+
     string _moneyKey = "Money";
 
 
@@ -29,5 +32,14 @@ public class Player : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public void Countdown(float value)
+    {
+        _countdownImage.fillAmount = value;
+    }
+    public void Sell(int value)
+    {
+        money += value;
     }
 }

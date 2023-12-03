@@ -48,6 +48,7 @@ public class Source : MonoBehaviour
             {
                 _currentIngredient = _objectPool.Get();
                 _currentIngredient.ID = _sourceData.ID;
+                _currentIngredient.sellValue = _sourceData._ingredientSellValue;
                 _currentIngredient.ChangeMaterial(_sourceData._ingredientMat);
                 _currentIngredient.transform.position = transform.position + Vector3.up * _paddingUp;
                 _isReady = true;

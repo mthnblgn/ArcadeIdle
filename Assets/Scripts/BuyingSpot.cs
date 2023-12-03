@@ -7,23 +7,24 @@ using UnityEngine.UI;
 
 public class BuyingSpot : MonoBehaviour
 {
-    [SerializeField] SourcesScriptable _whatToBuy;
+    [SerializeField] SourcesScriptable _sourceData;
     [SerializeField] Source _sourcePrefab;
     [SerializeField] Image _image;
     [SerializeField] TextMeshProUGUI _priceText;
     int _currentPrice = 0;
-    float counter = 2;
+    float counter = 1;
     void Start()
     {
-        _image.color = _whatToBuy._ingredientMat.color;
-        _currentPrice = _whatToBuy._sourcePrice;
+        _image.color = _sourceData._ingredientMat.color;
+        _currentPrice = _sourceData._sourcePrice;
         _priceText.text = _currentPrice.ToString();
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.TryGetComponent(out Player player))
+        if (other.TryGetComponent(out Player player) && player.money > 0)
         {
+            player.Countdown(counter);
             if (counter <= 0)
             {
                 StartCoroutine(BuyingCoroutine(player));
@@ -33,29 +34,29 @@ public class BuyingSpot : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        counter = 2;
+        counter = 1;
+        other.TryGetComponent(out Player player);
+        player.Countdown(0);
     }
+
 
     IEnumerator BuyingCoroutine(Player p)
     {
-        if (p.money > 0)
+
+        p.money--;
+        _currentPrice--;
+        _priceText.text = _currentPrice.ToString();
+        if (_currentPrice == 0)
         {
-            p.money--;
-            _currentPrice--;
-            _priceText.text = _currentPrice.ToString();
-            if (_currentPrice == 0)
-            {
-                Source s = Instantiate(_sourcePrefab, transform.position, Quaternion.identity);
-                s.SetSource(_whatToBuy);
-                ResetAndRelocate();
-            }
-            yield return new WaitForSeconds(.05f);
+            Source s = Instantiate(_sourcePrefab, transform.position, Quaternion.identity);
+            s.SetSource(_sourceData);
+            ResetAndRelocate();
         }
-        yield return null;
+        yield return new WaitForSeconds(.05f);
     }
     void ResetAndRelocate()
     {
-        _currentPrice = _whatToBuy._sourcePrice;
+        _currentPrice = _sourceData._sourcePrice;
         _priceText.text = _currentPrice.ToString();
         transform.position += Vector3.forward * 6;
     }

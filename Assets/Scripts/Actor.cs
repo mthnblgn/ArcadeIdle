@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.UI;
 using static UnityEditor.Experimental.GraphView.Port;
 
 public class Actor : MonoBehaviour
@@ -47,17 +48,42 @@ public class Actor : MonoBehaviour
     {
         _animController.SetBool("IsCarrying", true);
         ingredient.Carry(NextEmptyPoint());
-        //_carryPoint.position = _ingredients.Peek().transform.position + Vector3.up * 2;
     }
-    public Carrier NextEmptyPoint()
+    public Transform NextEmptyPoint()
     {
         for (int i = 0; i < _carryPoints.Length; i++)
         {
             if (_carryPoints[i]._isEmpty)
             {
-                return _carryPoints[i];
+                return _carryPoints[i].transform;
             }
         }
         return null;
+    }
+    public Ingredient FirstIngredientOnCarry()
+    {
+        for (int i = 4; i >= 0; i--)
+        {
+            if (!_carryPoints[i]._isEmpty)
+            {
+                Ingredient ingredient = _carryPoints[i]._ingredient;
+                return ingredient;
+            }
+        }
+        return null;
+    }
+    public void SellIngredient()
+    {
+        Ingredient ingredient = FirstIngredientOnCarry();
+        ingredient.Release();
+        if (!IsCarry()) _animController.SetBool("IsCarrying", false);
+    }
+    public bool IsCarry()
+    {
+        for (int i = 0; i < _carryPoints.Length; i++)
+        {
+            if (!_carryPoints[i]._isEmpty) return true;
+        }
+        return false;
     }
 }
