@@ -10,18 +10,13 @@ using static UnityEditor.Experimental.GraphView.Port;
 
 public class Actor : MonoBehaviour
 {
-    [Header("Movement")]
-    [SerializeField] float _velocity = 5;
-    [SerializeField] float _rotationalSpeed = 20;
-    [SerializeField] Animator _animController;
-    [Header("Carry")]
     [SerializeField] int _carryCapacity;
     [SerializeField] float _carryGap;
     [SerializeField] Carrier _carryPointPrefab;
     [SerializeField] Transform _firstCarrierSpawnPoint;
-    [Header("Player")]
-    [SerializeField] Player _player;
-
+    [SerializeField] float _velocity = 5;
+    [SerializeField] float _rotationalSpeed = 20;
+    [SerializeField] Animator _animController;
     Carrier[] _carryPoints;
     Vector3 _direction;
     private void Awake()

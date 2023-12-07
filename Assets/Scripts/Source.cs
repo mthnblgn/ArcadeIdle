@@ -1,10 +1,11 @@
+using DesignPatterns.ObjectPool;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.UI;
 
-public class Source: PoolUser<IngredientPoolObject>
+public class Source : MonoBehaviour
 {
     Camera _mainCam;
 
@@ -14,16 +15,18 @@ public class Source: PoolUser<IngredientPoolObject>
     [SerializeField] private bool _collectionCheck = true;
     [SerializeField] private int _defaultCapacity = 10;
     [SerializeField] private int _maxSize = 500;
+    [SerializeField] Ingredient _ingredientPrefab;
     [SerializeField] Renderer _tokenRenderer;
 
     float _countdownTime;
     float _time;
     bool _isReady;
-    IngredientPoolObject _currentIngredient;
+    Ingredient _currentIngredient;
+    IObjectPool<Ingredient> _objectPool;
 
     private void Awake()
     {
-        _objectPool = new ObjectPool<IngredientPoolObject>(CreateIngredient,
+        _objectPool = new ObjectPool<Ingredient>(CreateIngredient,
                 OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject,
                 _collectionCheck, _defaultCapacity, _maxSize);
         _mainCam = Camera.main;
@@ -44,10 +47,10 @@ public class Source: PoolUser<IngredientPoolObject>
             if (_countdownTime <= _time)
             {
                 _currentIngredient = _objectPool.Get();
-                _currentIngredient._ingredient.ID = _sourceData.ID;
-                _currentIngredient._ingredient.sellValue = _sourceData._ingredientSellValue;
-                _currentIngredient._ingredient.ChangeMaterial(_sourceData._ingredientMat);
-                _currentIngredient._ingredient.transform.position = transform.position + Vector3.up * _paddingUp;
+                _currentIngredient.ID = _sourceData.ID;
+                _currentIngredient.sellValue = _sourceData._ingredientSellValue;
+                _currentIngredient.ChangeMaterial(_sourceData._ingredientMat);
+                _currentIngredient.transform.position = transform.position + Vector3.up * _paddingUp;
                 _isReady = true;
             }
         }
@@ -58,36 +61,36 @@ public class Source: PoolUser<IngredientPoolObject>
         {
             _time = 0;
             _counter.fillAmount = 0;
-            actor.TakeIngredient(_currentIngredient._ingredient);
+            actor.TakeIngredient(_currentIngredient);
             _currentIngredient = null;
             _isReady = false;
         }
     }
     // invoked when creating an item to populate the object pool
-    //private Ingredient CreateIngredient()
-    //{
-    //    Ingredient ingredientInstance = Instantiate(_ingredientPrefab);
-    //    ingredientInstance.ObjectPool = _objectPool;
-    //    return ingredientInstance;
-    //}
+    private Ingredient CreateIngredient()
+    {
+        Ingredient ingredientInstance = Instantiate(_ingredientPrefab);
+        ingredientInstance.ObjectPool = _objectPool;
+        return ingredientInstance;
+    }
 
-    //// invoked when returning an item to the object pool
-    //private void OnReleaseToPool(Ingredient pooledObject)
-    //{
-    //    pooledObject.gameObject.SetActive(false);
-    //}
+    // invoked when returning an item to the object pool
+    private void OnReleaseToPool(Ingredient pooledObject)
+    {
+        pooledObject.gameObject.SetActive(false);
+    }
 
-    //// invoked when retrieving the next item from the object pool
-    //private void OnGetFromPool(Ingredient pooledObject)
-    //{
-    //    pooledObject.gameObject.SetActive(true);
-    //}
+    // invoked when retrieving the next item from the object pool
+    private void OnGetFromPool(Ingredient pooledObject)
+    {
+        pooledObject.gameObject.SetActive(true);
+    }
 
-    //// invoked when we exceed the maximum number of pooled items (i.e. destroy the pooled object)
-    //private void OnDestroyPooledObject(Ingredient pooledObject)
-    //{
-    //    Destroy(pooledObject.gameObject);
-    //}
+    // invoked when we exceed the maximum number of pooled items (i.e. destroy the pooled object)
+    private void OnDestroyPooledObject(Ingredient pooledObject)
+    {
+        Destroy(pooledObject.gameObject);
+    }
     public void SetSource(SourcesScriptable sourceScriptable)
     {
         _sourceData = sourceScriptable;

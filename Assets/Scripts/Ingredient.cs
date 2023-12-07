@@ -3,7 +3,6 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Pool;
 
-[RequireComponent(typeof(IngredientPoolObject))]
 public class Ingredient : MonoBehaviour
 {
     private int _id { get; set; }
@@ -13,7 +12,8 @@ public class Ingredient : MonoBehaviour
 
     [SerializeField] Renderer _renderer;
 
-
+    private IObjectPool<Ingredient> objectPool;
+    public IObjectPool<Ingredient> ObjectPool { set => objectPool = value; }
     Transform _followPoint;
 
     private void FixedUpdate()
@@ -43,5 +43,6 @@ public class Ingredient : MonoBehaviour
         c._isEmpty = true;
         c.ExplodeParticle();
         _followPoint=null;
+        objectPool.Release(this);
     }
 }
