@@ -181,9 +181,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8145461978765007754, guid: d28b5f4464feb3445bb44e3299483da8, type: 3}
-      propertyPath: _sourceData
+      propertyPath: initPoolSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8145461978765007754, guid: d28b5f4464feb3445bb44e3299483da8, type: 3}
+      propertyPath: objectToPool
       value: 
-      objectReference: {fileID: 11400000, guid: 0f1a2ab06439bce4aaa54dbbbd87e98c, type: 2}
+      objectReference: {fileID: 8225389452202043160, guid: 482d10ccf6d75984eaa7bf08849ed6c4, type: 3}
     - target: {fileID: 8821842199428290970, guid: d28b5f4464feb3445bb44e3299483da8, type: 3}
       propertyPath: m_Name
       value: Source

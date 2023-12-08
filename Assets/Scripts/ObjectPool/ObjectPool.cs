@@ -17,13 +17,9 @@ namespace DesignPatterns.ObjectPool
         // store the pooled objects in stack
         private Stack<PooledObject> stack;
 
-        private void Start()
-        {
-            SetupPool();
-        }
 
         // creates the pool (invoke when the lag is not noticeable)
-        private void SetupPool()
+        protected void SetupPool()
         {
             // missing objectToPool Prefab field
             if (objectToPool == null)

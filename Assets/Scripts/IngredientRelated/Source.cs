@@ -5,34 +5,29 @@ using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.UI;
 
-public class Source : MonoBehaviour
+public class Source : ObjectPool
 {
     Camera _mainCam;
 
     [SerializeField] Image _counter;
     [SerializeField] float _paddingUp;
     [SerializeField] SourcesScriptable _sourceData;
-    [SerializeField] private bool _collectionCheck = true;
-    [SerializeField] private int _defaultCapacity = 10;
-    [SerializeField] private int _maxSize = 500;
-    [SerializeField] Ingredient _ingredientPrefab;
     [SerializeField] Renderer _tokenRenderer;
 
     float _countdownTime;
     float _time;
     bool _isReady;
+
+    PooledObject _pooledObject;
     Ingredient _currentIngredient;
-    IObjectPool<Ingredient> _objectPool;
 
     private void Awake()
     {
-        _objectPool = new ObjectPool<Ingredient>(CreateIngredient,
-                OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject,
-                _collectionCheck, _defaultCapacity, _maxSize);
         _mainCam = Camera.main;
     }
     private void Start()
     {
+        SetupPool();
         _countdownTime = _sourceData._waitingTime;
         _tokenRenderer.material = _sourceData._ingredientMat;
     }
@@ -46,7 +41,8 @@ public class Source : MonoBehaviour
             _counter.color = LerpColor(Color.red, Color.yellow, Color.green, _counter.fillAmount);
             if (_countdownTime <= _time)
             {
-                _currentIngredient = _objectPool.Get();
+                _pooledObject = GetPooledObject();
+                _currentIngredient=_pooledObject.GetComponent<Ingredient>();
                 _currentIngredient.ID = _sourceData.ID;
                 _currentIngredient.sellValue = _sourceData._ingredientSellValue;
                 _currentIngredient.ChangeMaterial(_sourceData._ingredientMat);
@@ -65,31 +61,6 @@ public class Source : MonoBehaviour
             _currentIngredient = null;
             _isReady = false;
         }
-    }
-    // invoked when creating an item to populate the object pool
-    private Ingredient CreateIngredient()
-    {
-        Ingredient ingredientInstance = Instantiate(_ingredientPrefab);
-        ingredientInstance.ObjectPool = _objectPool;
-        return ingredientInstance;
-    }
-
-    // invoked when returning an item to the object pool
-    private void OnReleaseToPool(Ingredient pooledObject)
-    {
-        pooledObject.gameObject.SetActive(false);
-    }
-
-    // invoked when retrieving the next item from the object pool
-    private void OnGetFromPool(Ingredient pooledObject)
-    {
-        pooledObject.gameObject.SetActive(true);
-    }
-
-    // invoked when we exceed the maximum number of pooled items (i.e. destroy the pooled object)
-    private void OnDestroyPooledObject(Ingredient pooledObject)
-    {
-        Destroy(pooledObject.gameObject);
     }
     public void SetSource(SourcesScriptable sourceScriptable)
     {

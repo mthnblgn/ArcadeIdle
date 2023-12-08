@@ -75,7 +75,7 @@ public class Actor : MonoBehaviour
     public void SellIngredient()
     {
         Ingredient ingredient = FirstIngredientOnCarry();
-        ingredient.Release();
+        ingredient.Put();
         if (!IsCarry()) _animController.SetBool("IsCarrying", false);
     }
     public bool IsCarry()

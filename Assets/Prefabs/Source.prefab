@@ -411,7 +411,7 @@ Transform:
   - {fileID: 6965580854132269056}
   - {fileID: 807623252526438650}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8145461978765007754
 MonoBehaviour:
@@ -425,13 +425,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed3ddf9973afe59489170be01f82d107, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initPoolSize: 0
+  objectToPool: {fileID: 8225389452202043160, guid: 482d10ccf6d75984eaa7bf08849ed6c4, type: 3}
   _counter: {fileID: 1708541985045158250}
-  _paddingUp: 1
-  _sourceData: {fileID: 0}
-  _collectionCheck: 1
-  _defaultCapacity: 10
-  _maxSize: 500
-  _ingredientPrefab: {fileID: 8225389452202043160, guid: 482d10ccf6d75984eaa7bf08849ed6c4, type: 3}
+  _paddingUp: 1.5
+  _sourceData: {fileID: 11400000, guid: 0f1a2ab06439bce4aaa54dbbbd87e98c, type: 2}
   _tokenRenderer: {fileID: 7827148198966239344}
 --- !u!65 &8383565419333223334
 BoxCollider:
