@@ -40,6 +40,6 @@ public class Ingredient : PooledObject
         c._isEmpty = true;
         c.ExplodeParticle();
         _followPoint=null;
-        Release();
+        Release(0);
     }
 }

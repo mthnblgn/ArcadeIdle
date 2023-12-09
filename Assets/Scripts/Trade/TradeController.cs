@@ -7,12 +7,14 @@ public class TradeController : ObjectPool
 {
     [SerializeField] private List<BuyingSpot> _buyingSpots;
     [SerializeField] private List<SellingSpot> _sellingSpots;
-    [SerializeField] private float _counter = 2;
+     private float _counter;
+    [SerializeField] private Vector3 _spawnPoint;
 
     private Customer _lastCustomer;
-    SellingSpot sellingSpot;
+    SellingSpot _sellingSpot;
     private void Start()
     {
+        _counter = GameController._currentLevel.CustomerTime;
         SetupPool();
     }
     private void FixedUpdate()
@@ -21,9 +23,10 @@ public class TradeController : ObjectPool
         {
             _lastCustomer = GetPooledObject().GetComponent<Customer>();
             _lastCustomer.gameObject.SetActive(true);
+            _lastCustomer. transform.position = _spawnPoint;
             _lastCustomer.GetInLine(ChooseSellingSpot());
             _lastCustomer = null;
-            _counter = 2;
+            _counter = GameController._currentLevel.CustomerTime;
         }
         else
         {
@@ -34,13 +37,13 @@ public class TradeController : ObjectPool
     {
         for (int i = 0; i < _sellingSpots.Count; i++)
         {
-            if (sellingSpot.IsUnityNull()) sellingSpot = _sellingSpots[i];
-            else if (_sellingSpots[i].CustomerCount() < sellingSpot.CustomerCount())
+            if (_sellingSpot.IsUnityNull()) _sellingSpot = _sellingSpots[i];
+            else if (_sellingSpots[i].CustomerCount() < _sellingSpot.CustomerCount())
             {
-                sellingSpot = _sellingSpots[i];
+                _sellingSpot = _sellingSpots[i];
             }
         }
-        if (sellingSpot.CustomerCount() >= 3) return null;
-        return sellingSpot;
+        if (_sellingSpot.CustomerCount() >= 3) return null;
+        return _sellingSpot;
     }
 }

@@ -14,8 +14,13 @@ public class PooledObject : MonoBehaviour
     {
         _gameObject = transform.gameObject;
     }
-    public void Release()
+    public void Release(int waitSeconds)
     {
+        StartCoroutine(ReleaseCoroutine(waitSeconds));
+    }
+    IEnumerator ReleaseCoroutine(int waitSeconds)
+    {
+        yield return  new WaitForSeconds(waitSeconds);
         _pool.ReturnToPool(this);
     }
 }

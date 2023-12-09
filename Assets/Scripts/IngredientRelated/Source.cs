@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,10 @@ public class Source : ObjectPool
     PooledObject _pooledObject;
     Ingredient _currentIngredient;
 
+    private void OnEnable()
+    {
+        transform.DOScale(Vector3.one, 1f).SetEase(Ease.InBounce);
+    }
     private void Awake()
     {
         _mainCam = Camera.main;

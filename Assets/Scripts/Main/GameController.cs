@@ -15,10 +15,11 @@ public class GameController : MonoBehaviour
     public static int _level { get { return _level; } set { if (value == _level + 1) _level = value; } }
 
     [SerializeField] LevelScriptable[] levels;
-    [SerializeField] Ingredient[] _ingredients;
+    [SerializeField] IngredientScriptable[] _ingredients;
     public static LevelScriptable _currentLevel;
-    public static Ingredient[] ingredients;
-    void Start()
+    public static IngredientScriptable[] ingredients;
+    public static int _customerCount;
+    void Awake()
     {
         _currentLevel = levels[0];
         _phase = Phase.Start;
@@ -28,14 +29,17 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (_customerCount>=_currentLevel.CustomerCount)
+        {
+            _currentLevel = levels[_currentLevel.Level + 1];
+        }
     }
-    public static Ingredient[] GetOrder()
+    public static int[] GetOrder()
     {
-        Ingredient[] order = new Ingredient[Random.Range(1,_currentLevel.OrderQuantity+1)];
+        int[] order = new int[Random.Range(1,_currentLevel.OrderQuantity+1)];
         for (int i = 0; i < order.Length; i++)
         {
-            order[i] = ingredients[Random.Range(0,_currentLevel.OrderQuality)];
+            order[i] = ingredients[Random.Range(0,_currentLevel.OrderQuality)].ID;
         }
         return order;
     }

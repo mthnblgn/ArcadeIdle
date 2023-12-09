@@ -2,6 +2,7 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -17,7 +18,7 @@ public class Actor : MonoBehaviour
     [SerializeField] float _velocity = 5;
     [SerializeField] float _rotationalSpeed = 20;
     [SerializeField] Animator _animController;
-    Carrier[] _carryPoints;
+    [SerializeField] Carrier[] _carryPoints;
     Vector3 _direction;
     private void Awake()
     {
@@ -60,22 +61,22 @@ public class Actor : MonoBehaviour
         }
         return null;
     }
-    public Ingredient FirstIngredientOnCarry()
+    public Carrier[] ReturnLastCarryPoints(int count)
     {
-        for (int i = 4; i >= 0; i--)
-        {
-            if (!_carryPoints[i]._isEmpty)
-            {
-                Ingredient ingredient = _carryPoints[i]._ingredient;
-                return ingredient;
-            }
-        }
-        return null;
+        Carrier[] ret = new Carrier[count];
+        ret = _carryPoints.Reverse().Skip(EmptyCarryCount()).Take(count).ToArray();
+        return ret;
     }
-    public void SellIngredient()
+    public void SellIngredient(int count)
     {
-        Ingredient ingredient = FirstIngredientOnCarry();
-        ingredient.Put();
+        Carrier[] carriers = ReturnLastCarryPoints(count);
+        foreach (Carrier c in carriers)
+        {
+            Ingredient ingredient = c._ingredient;
+            ingredient.Put();
+            c._ingredient = null;
+        }
+
         if (!IsCarry()) _animController.SetBool("IsCarrying", false);
     }
     public bool IsCarry()
@@ -85,5 +86,24 @@ public class Actor : MonoBehaviour
             if (!_carryPoints[i]._isEmpty) return true;
         }
         return false;
+    }
+    public int[] CarryIDs()
+    {
+        int[] carryIDs = new int[_carryCapacity];
+        for (int i = 0; i < carryIDs.Length; i++)
+        {
+            Ingredient ingredient = _carryPoints[i]._ingredient;
+            carryIDs[i] = (ingredient.IsUnityNull()) ? 0 : ingredient.ID;
+        }
+        return carryIDs;
+    }
+    public int EmptyCarryCount()
+    {
+        int count = 0;
+        for (int i = 0; i < _carryPoints.Length; i++)
+        {
+            if (_carryPoints[i]._isEmpty) count++;
+        }
+        return count;
     }
 }
