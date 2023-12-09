@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06afb66331a50ab43b1ed45e93d326c5, type: 3}
-  m_Name: Source 2
+  m_Script: {fileID: 11500000, guid: da5f012ca05f78f498d23103f1e4d976, type: 3}
+  m_Name: Ingredient 2
   m_EditorClassIdentifier: 
-  _waitingTime: 15
-  ingredientData: {fileID: 11400000, guid: 116b5564db49f644caaff2c3411a68c9, type: 2}
-  _sourcePrice: 4000
+  ID: 0
+  Name: 
+  _ingredientMat: {fileID: 2100000, guid: e492e34ab73786d4aa29512ab12ede2c, type: 2}
+  _ingredientSellValue: 1200

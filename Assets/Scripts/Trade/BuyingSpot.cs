@@ -15,7 +15,7 @@ public class BuyingSpot : MonoBehaviour
     float counter = 1;
     void Start()
     {
-        _image.color = _sourceData._ingredientMat.color;
+        _image.color = _sourceData.ingredientData._ingredientMat.color;
         _currentPrice = _sourceData._sourcePrice;
         _priceText.text = _currentPrice.ToString();
     }

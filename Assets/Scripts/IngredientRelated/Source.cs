@@ -1,8 +1,4 @@
-using DesignPatterns.ObjectPool;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
 using UnityEngine.UI;
 
 public class Source : ObjectPool
@@ -29,7 +25,7 @@ public class Source : ObjectPool
     {
         SetupPool();
         _countdownTime = _sourceData._waitingTime;
-        _tokenRenderer.material = _sourceData._ingredientMat;
+        _tokenRenderer.material = _sourceData.ingredientData._ingredientMat;
     }
     void FixedUpdate()
     {
@@ -41,11 +37,10 @@ public class Source : ObjectPool
             _counter.color = LerpColor(Color.red, Color.yellow, Color.green, _counter.fillAmount);
             if (_countdownTime <= _time)
             {
-                _pooledObject = GetPooledObject();
-                _currentIngredient=_pooledObject.GetComponent<Ingredient>();
-                _currentIngredient.ID = _sourceData.ID;
-                _currentIngredient.sellValue = _sourceData._ingredientSellValue;
-                _currentIngredient.ChangeMaterial(_sourceData._ingredientMat);
+                _currentIngredient= GetPooledObject().GetComponent<Ingredient>();
+                _currentIngredient.ID = _sourceData.ingredientData.ID;
+                _currentIngredient.sellValue = _sourceData.ingredientData._ingredientSellValue;
+                _currentIngredient.ChangeMaterial(_sourceData.ingredientData._ingredientMat);
                 _currentIngredient.transform.position = transform.position + Vector3.up * _paddingUp;
                 _isReady = true;
             }

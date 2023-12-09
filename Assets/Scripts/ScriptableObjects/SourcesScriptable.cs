@@ -5,10 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Source", menuName = "Scriptables/Sources")]
 public class SourcesScriptable : ScriptableObject
 {
-    public int ID;
-    public string Name;
     public float _waitingTime;
-    public Material _ingredientMat;
+    public IngredientScriptable ingredientData;
     public int _sourcePrice;
-    public int _ingredientSellValue;
 }
