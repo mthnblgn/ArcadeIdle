@@ -52,7 +52,7 @@ public class BuyingSpot : MonoBehaviour
             s.SetSource(_sourceData);
             ResetAndRelocate();
         }
-        yield return new WaitForSeconds(.05f);
+        yield return new WaitForSeconds(.01f);
     }
     void ResetAndRelocate()
     {

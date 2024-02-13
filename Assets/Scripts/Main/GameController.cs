@@ -16,12 +16,14 @@ public class GameController : MonoBehaviour
 
     [SerializeField] LevelScriptable[] levels;
     [SerializeField] IngredientScriptable[] _ingredients;
+    [SerializeField] UIController _uiController;
+
     public static LevelScriptable _currentLevel;
     public static IngredientScriptable[] ingredients;
     public static int _customerCount;
     void Awake()
     {
-        _currentLevel = levels[0];
+        _currentLevel = levels[2];
         _phase = Phase.Start;
         ingredients = _ingredients;
     }
